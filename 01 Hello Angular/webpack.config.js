@@ -1,76 +1,3 @@
-# Sample 00 - Boiler plate
-
-- Let's start by initializing our package json project
-
-```cmd
-npm init
-```
-
-- Let's install the following packages
-
-```cmd
-npm install webpack webpack-dev-server typescript awesome-typescript-loader --save-dev
-```
-
-```cmd
-npm install babel-core babel-preset-env --save-dev
-```
-
-```cmd
-npm install node-sass sass-loader style-loader css-loader html-webpack-plugin extract-text-webpack-plugin 
-file-loader url-loader --save-dev
-```
-
-```cmd
-npm install bootstrap@3.3.7 --save
-```
-
-- Create .babelrc configuration
-
-_./.babelrc_
-
-```json
-{
-  "presets": [
-    [
-      "env",
-      {
-        "modules": false
-      }
-    ]
-  ]
-}
-```
-
-Let's create tsconfig.json
-
-_./tsconfig.json_
-
-```json
-{
-  "compilerOptions": {
-    "target": "es6",
-    "moduleResolution": "node",
-    "noImplicitAny": false,
-    "removeComments": true,
-    "sourceMap": true,
-    "jsx": "react",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": false,
-    "noLib": false,
-    "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true
-  },
-  "compileOnSave": false,
-  "exclude": [
-    "node_modules"
-  ]
-}
-```
-
-- Let's create a webpack.config.js
-
-```javascript
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
@@ -84,9 +11,13 @@ module.exports = {
     extensions: ['.js', '.ts']
   },
   entry: {
-    app: './main.ts',
+    app: './app/app.ts',
+    vendor: [
+      'angular',
+    ],    
     appStyles: [
-      './mystyles.scss',
+      '../node_modules/bootstrap/dist/css/bootstrap.css',
+      './mystyles.scss',       
     ]
   },
   output: {
@@ -103,6 +34,11 @@ module.exports = {
             useBabel: true
           }        
       },
+      { 
+        test: /\.html$/,
+        exclude: /node_modules/,
+        loader: 'raw-loader'
+      },      
       {
         test: /\.scss$/,
         exclude: /node_modules/,
@@ -170,65 +106,3 @@ module.exports = {
     }),
   ],
 };
-```
-
-- Let's update our package.json
-
-```diff
-  "scripts": {
-+    "start": "webpack-dev-server --inline",
-+    "build": "webpack",
--    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-```
-
-- Let's create a new folder called _src_
-
-```cmd
-mkdir src
-```
-
-- Let's create a simple typescript file
-
-_./src/main.ts_
-
-```typescript
-const App = console.log('Hello from ts');
-
-export default App;
-```
-
-- And a _index.html_ file
-
-_./src/index.html
-
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Angular 1.5 Sample App</title>
-  </head>
-  <body>
-    <div>
-        <h1>00 Boilerplate</h1>
-    </div>
-  </body>
-</html>
-```
-
-- And a empty styles files:
-
-_./src/mystyles.scss_
-``` 
-```
-
-- Let's try that we have built is working, from the console / bash terminal we can run 
-
-```
-npm run build 
-```
-
-```
-npm start
-```
