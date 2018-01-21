@@ -128,13 +128,13 @@ css, in a real project we will avoid this and use CSS modules like approach + SA
 _./src/app/components/client/list/result/client.list.result.component.html_
 
 ```html
-<div style="display:flex;flex-direction:column">
-  <div class="panel panel-default" style="display:flex;flex-direction:column;flex-flow: center;height: 80px">
+<div style="display:flex;flex-direction:row">
+  <div class="panel panel-default" style="height: 80px">
      <a href="/#">My sport dealer</a>
      <span>Lorem ipsum dolor sit amet, consectetur.. </span>
   </div>
-  <div class="panel panel-default" style="display:flex;flex-direction:column;align-items: flex-start;height: 80px">
-     <a href="/#">We run</a>     
+  <div class="panel panel-default" style="height: 80px">
+     <a href="/#">We Run</a>     
      <span>Lorem ipsum dolor sit amet, consectetur.. </span>
   </div>   
 </div>
@@ -189,8 +189,8 @@ two: ClientListResultComponent and ClientCardComponent, now it's time to expose 
 _./src/app/components/client/list/result/client.list.card.component.html_
 
 ```html
-  <div class="panel panel-default" style="display:flex;flex-direction:column;flex-flow: center;height: 80px">
-     <a href="/#">Barbican</a>
+  <div class="panel panel-default" style="height: 80px">
+     <a href="/#">My sport dealer</a>
      <span>Lorem ipsum dolor sit amet, consectetur.. </span>
   </div>
 ```
@@ -211,17 +211,21 @@ export const ClientListCardComponent = {
 - Time to jump back to the template and add the bindings
 
 
-```html
-  <div class="panel panel-default" style="display:flex;flex-direction:column;flex-flow: center;height: 80px">
-     <a href="/#">{{vm.client}}</a>
-     <span>{{vm.details}</span>
+```diff
+  <div class="panel panel-default" style="height: 80px">
+-     <a href="/#">My sport dealer</a>        
++     <a href="/#">{{vm.client}}</a>
+-     <span>Lorem ipsum dolor sit amet, consectetur.. </span>     
++     <span>{{vm.details}}</span>
   </div>
 ```
 
 
 - Let's register this new component
 
-```javascript
+_./src/app/components/client/list_
+
+```diff
 import * as angular from 'angular';
 import { ClientListComponent } from './client.list.component';
 import { ClientListSearchComponent } from './search/client.list.search.component';
@@ -239,16 +243,26 @@ export const ClientListModule = angular.module('clientlist', [
 
 - Let's use in on client.list.result.component (right now using harcoded data)
 
-```html
-<div style="display:flex;flex-direction:column">
-  <div>
-      <clientlistcardcomponent client="'Barbican'" details="'Lorem ipsum dolor sit amet, consectetur..'"/>
-  </div>
-  <div>
-    <clientlistcardcomponent client="'Dual'" details="'Lorem ipsum dolor sit amet, consectetur..'"/>
-  </div>  
+_./src/app/components/client/list/result/client.list.result.component.html_
+
+```diff
+<div style="display:flex;flex-direction:row">
++  <clientlistcardcomponent client="'My sport dealer'" details="'Lorem ipsum dolor sit amet, consectetur..'"></clientlistcardcomponent>
+-  <div class="panel panel-default" style="height: 80px">
+-     <a href="/#">My sport dealer</a>
+-     <span>Lorem ipsum dolor sit amet, consectetur.. </span>
+-  </div>
+
++  <clientlistcardcomponent client="'We Run'" details="'Lorem ipsum dolor sit amet, consectetur..'"></clientlistcardcomponent>
+-  <div class="panel panel-default" style="height: 80px">
+-     <a href="/#">We Run</a>     
+-     <span>Lorem ipsum dolor sit amet, consectetur.. </span>
+-  </div>   
 </div>
 ```
+
+> Note down the "' used (just to avoid referencia a scope variable, rewind back to card component and check vm. stuff)
+
 
 - If we run the project the same result as before will be displayed but now we have a more maintanable structure.
 
