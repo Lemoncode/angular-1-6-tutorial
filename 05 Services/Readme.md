@@ -75,7 +75,7 @@ npm install jasmine-core jasmine @types/jasmine --save-dev
 - Let's install some angular testing helpers.
 
 ```cmd
-npm install angular-mocks --save-dev
+npm install angular-mocks @types/angular-mocks --save-dev
 ```
 
 - Let's update our package json and include a test script:
