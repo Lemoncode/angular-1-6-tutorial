@@ -272,7 +272,7 @@ describe('login', () => {
 npm test
 ```
 
-> We can keep it wathching and exucting the tests again on every change by calling _npm run test:watch_
+> We can keep it watching and exucting the tests again on every change by calling _npm run test:watch_
 
 - We can try to follow TDD, let's start by definining a test expecting a simple LoginService,
 if we implement it we get red lights, or even cannot execute (expected the services does not exist)
@@ -288,8 +288,6 @@ describe('login', () => {
 -      expect(dummy).toBeTruthy();
 -    })
 
-+    describe('login', () => {
-+      describe('performLogin', () => {
 +        it('Login Service exists', () => {    
 +          const loginService = new LoginService();
 +      
@@ -305,7 +303,7 @@ describe('login', () => {
 
 - Now let's define a basic login service (no promises yet) and add a proper test.
 
-./src/app/login.ts
+_./src/app/login.ts_
 
 ```javascript
 export class LoginService {
@@ -319,8 +317,11 @@ export class LoginService {
 
 - And add the import to the spec
 
+
+_./src/app/login.spec.ts_
+
 ```diff
-import { LoginService } from "./login"
++ import { LoginService } from "./login"
 
 describe('login', () => {
   describe('performLogin', () => {
@@ -488,7 +489,7 @@ whole file content
 ```javascript
 import { LoginService } from "./login"
 import * as angular from 'angular'
-import {} from 'angular-mocks';
+import 'angular-mocks';
 
 describe('login', () => {
   describe('performLogin', () => {
@@ -496,7 +497,7 @@ describe('login', () => {
     let $rootScope;
 
     beforeEach(() => {                  
-      angular.mock.inject((_$q_, _$rootScope_) => {
+      angular['mock'].inject((_$q_, _$rootScope_) => {
           this.$q = _$q_;
           this.$rootScope = _$rootScope_;
       });    
