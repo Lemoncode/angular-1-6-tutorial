@@ -121,7 +121,7 @@ describe('LoginPage', () => {
 +  it('has defined doLogin method', () => {        
 +    const controller = this.$componentController('loginPage');    
 +
-+    expect(controller.doLogin('admin', 'test')).toBeDefined();
++    expect(controller.doLogin).toBeDefined();
 +  })  
 
 });
@@ -179,6 +179,50 @@ export const LoginModule = angular.module('login', [
 ;
 ```
 
+- Let's use the service in the loginPage
+
+_./src/app/components/login/login.page.controller.ts_
+
+```diff
+
++ import { LoginService } from '../../api/login'
+
+
+export class LoginPageController {
++  loginService : LoginService = null;
+
+-  constructor() {
++  constructor(LoginService : LoginService) {
++    "ngInject";
+
++    this.LoginService = LoginService;
+  }  
+
+  doLogin(login : string, password : string) {
++    this.loginService.validateLogin(login, password).then(
++       (succeeded) => {
++         if(succeeded) {
++            console.log('login succeeded');
++         } else {
++           console.log('login failed');
++         }
++       }
++    );
+  }
+}
+```
+
+- Let's add a test case, invoking login result
+
+_./src/app/components/login/login.page.spec.ts_
+```diff
+it('execute doLogin method', () => {
+    const controller = this.$componentController('loginPage');
+
+    expect(controller.doLogin('admin', 'test')).toBeDefined();
+})
+```
+
 - Now if we see the test we get red lights, we need to import
 this module depency in the tests as well.
 
@@ -228,32 +272,4 @@ describe('LoginPage', () => {
 ```
 
 
-- Let's use the service in the loginPage
-
-_./src/app/components/login/login.page.controller.ts_
-
-```diff
-
-+ import { LoginService } from '../../api/login'
-
-
-export class LoginPageController {
-+  loginService : LoginService = null;
-
--  constructor(LoginService : LoginService) {
-+  constructor(LoginService : LoginService) {
-+    "ngInject";
-
-+    this.LoginService = LoginService;
-  }  
-
-  doLogin(login : string, password : string) {
-+    if(this.LoginService.validateLogin(login, password)) {
-+      console.log('Validation Succeeded');
-+    } else {
-+      console.log('Validation Failed');
-+    }
-  }
-}
-```
 
