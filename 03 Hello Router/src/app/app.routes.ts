@@ -1,10 +1,11 @@
-/// <reference types="angular-ui-router" />
 import * as angular from 'angular';
-import "angular-ui-router";
+import {StateProvider, UrlRouterProvider, Ng1StateDeclaration} from '@uirouter/angularjs'
 
+
+// https://github.com/ngParty/ng-metadata/issues/206
 export const routing = ($locationProvider: angular.ILocationProvider,
-  $stateProvider: angular.ui.IStateProvider,
-  $urlRouterProvider: angular.ui.IUrlRouterProvider
+  $stateProvider: StateProvider,
+  $urlRouterProvider: UrlRouterProvider
 
 ) => {
   "ngInject";
@@ -14,7 +15,7 @@ export const routing = ($locationProvider: angular.ILocationProvider,
     enabled: false
   });
 
-  $stateProvider.state('home', <ng.ui.IState>{
+  $stateProvider.state('home', <Ng1StateDeclaration>{
     url: '/home',
     views: {
       'content@': { template: '<login></login>' }

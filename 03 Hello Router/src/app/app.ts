@@ -4,7 +4,7 @@ import {AppComponent} from './app.component';
 import { components } from './components'
 
 angular.module('app', [
-    'ui-router',
+    'ui.router',
     components.name
   ])
   .config(routing)

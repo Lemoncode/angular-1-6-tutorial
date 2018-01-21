@@ -14,8 +14,8 @@ module.exports = {
   entry: {
     app: './app/app.ts',
     vendor: [
-      'angular',  
-      'angular-ui-router',    
+      'angular',        
+      '@uirouter/angularjs',
     ],    
     appStyles: [
       '../node_modules/bootstrap/dist/css/bootstrap.css',

@@ -20,7 +20,6 @@
   "homepage": "https://github.com/Lemoncode/angular-1-6-tutorial#readme",
   "devDependencies": {
     "@types/angular": "^1.6.40",
-    "@types/angular-ui-router": "^1.1.40",
     "@types/webpack-env": "^1.13.3",
     "awesome-typescript-loader": "^3.4.1",
     "babel-core": "^6.26.0",
@@ -35,8 +34,8 @@
     "webpack-env": "^0.8.0"
   },
   "dependencies": {
+    "@uirouter/angularjs": "^1.0.13",
     "angular": "^1.6.3",
-    "angular-ui-router": "^0.4.2",
     "bootstrap": "^3.3.7",
     "css-loader": "^0.28.9",
     "extract-text-webpack-plugin": "^3.0.2",
