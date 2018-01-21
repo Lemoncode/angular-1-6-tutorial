@@ -64,24 +64,23 @@ npm start
         |
         \---search
                client.list.search.component.ts
-               clientlistsearch.html
+               client.list.search.component.html
 ```
 
-> Later on it would be a good idea and add a refactor, client.list.component, should be named client.list.page?
-and another possible improvement could be to move to a page folder all the components that are just pages.
+> Later on it would be a good idea and add a refactor, client.list.component, should be named client.list.page?and another possible improvement could be to move to a page folder all the components that are just pages.
 
 - Let's start by creating clientListSearch:
 
 > Let's discuss here about naming, should we take it simpler? What's your take on this?
 
-_./src/app/components/client/list/clientlistsearch.html_
+_./src/app/components/client/list/client.list.search.component.html_
 
 ```html
 <div class="input-group">
   <input type="text" 
          class="form-control" 
          placeholder="Search"         
-         >
+         />
     
   <span class="input-group-btn"> 
     <button class="btn btn-primary" type="button">
@@ -95,7 +94,7 @@ _./src/app/components/client/list/client.list.search.component.ts_
 
 ```javascript
 export const ClientListSearchComponent = {
-  template: require('./clientlistsearch.html') as string
+  template: require('./client.list.search.component.html') as string
 };
 ```
 
@@ -119,7 +118,7 @@ export const ClientListModule = angular.module('clientlist', [
 ```diff
 <div>
 -    <h1>Hello From Client Component !</h1>
-+    <clientlistsearchcomponent/>
++    <clientlistsearchcomponent></clientlistsearchcomponent>  
 </div>
 ```
 
@@ -131,11 +130,11 @@ _./src/app/components/client/list/result/client.list.result.component.html_
 ```html
 <div style="display:flex;flex-direction:column">
   <div class="panel panel-default" style="display:flex;flex-direction:column;flex-flow: center;height: 80px">
-     <a href="/#">Barbican</a>
+     <a href="/#">My sport dealer</a>
      <span>Lorem ipsum dolor sit amet, consectetur.. </span>
   </div>
   <div class="panel panel-default" style="display:flex;flex-direction:column;align-items: flex-start;height: 80px">
-     <a href="/#">Dual</a>     
+     <a href="/#">We run</a>     
      <span>Lorem ipsum dolor sit amet, consectetur.. </span>
   </div>   
 </div>
@@ -170,17 +169,10 @@ export const ClientListModule = angular.module('clientlist', [
 - And let's use it
 
 _./src/app/components/client/list/clientlist.html_
-```html
+```diff
 <div>
-    <h1>Hello From Client Component !</h1>
-+    <div style="display:flex;flex-direction:column">
-+      <div>
-        <clientlistsearchcomponent/>         
-+      </div>
-+      <div>        
-+        <clientlistresultcomponent/>      
-+      </div>
-    </div>    
+  <clientlistsearchcomponent></clientlistsearchcomponent>  
++  <clientlistresultcomponent></clientlistresultcomponent>
 </div>
 ```
 
