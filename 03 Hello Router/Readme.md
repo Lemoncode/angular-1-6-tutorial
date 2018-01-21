@@ -3,14 +3,25 @@
 Most of the web applications follow the SPA approach. In this sample we are going to add the
 needed plumbing to setup ui-router and will create a couple of dummy pages to add navigation.
 
-- We will use ui-router let's install the library plus the typings
+- We will use ui-router let's install the library (in this case we don't need to install
+the typings, they are already included in the lib itself)
 
 ```cmd
-npm install angular-ui-router@0.4.2 --save
+npm install @uirouter/angularjs --save
 ```
 
-```cmd
-npm install @types/angular-ui-router@1.1.40 --save-dev
+- Let's add this library to our webpack.config.js libs entry.
+
+_./webpack.config.js_
+
+```diff
+  entry: {
+    app: './app/app.ts',
+    vendor: [
+      'angular',        
++      '@uirouter/angularjs',
+    ],    
+
 ```
 
 - Let's add this third partie module as a reference on our application.
@@ -36,29 +47,33 @@ there we will setup the ui-router and setup a route to a login pages
 _./src/app/app.routes.ts_
 
 ```javascript
-/// <reference types="angular-ui-router" />
 import * as angular from 'angular';
-import "angular-ui-router";
+import {StateProvider, UrlRouterProvider, Ng1StateDeclaration} from '@uirouter/angularjs'
 
 
+// https://github.com/ngParty/ng-metadata/issues/206
 export const routing = ($locationProvider: angular.ILocationProvider,
-                $stateProvider: angular.ui.IStateProvider,
-                $urlRouterProvider: angular.ui.IUrlRouterProvider) =>  {
-    "ngInject";
-    // html5 removes the need for # in URL
-    $locationProvider.html5Mode({
-        enabled: false
-    });
+  $stateProvider: StateProvider,
+  $urlRouterProvider: UrlRouterProvider
 
-    $stateProvider.state('home', <ng.ui.IState>{
-        url: '/home',
-        views: {
-            'content@': { template: '<login></login>' }
-        }
-      }
-    );
+) => {
+  "ngInject";
 
-    $urlRouterProvider.otherwise('/home');
+  // html5 removes the need for # in URL
+  $locationProvider.html5Mode({
+    enabled: false
+  });
+
+  $stateProvider.state('home', <Ng1StateDeclaration>{
+    url: '/home',
+    views: {
+      'content@': { template: '<login></login>' }
+    }
+  }
+  );
+
+  $urlRouterProvider.otherwise('/home');
+
 }
 ```
 - _Hold on a second_ What's this _ngInject_ string? We are using strict-di and we should now enumerate as
@@ -138,7 +153,7 @@ _./src/app/app.html_
 </div>
 ```
 
-- Now if we star the app the exact same display as before will be shown, but this time
+- Now if we start the app the exact same display as before will be shown, but this time
 using ui-router.
 
 ```cmd
@@ -156,7 +171,7 @@ _./src/client/list/clientlist.html_
 </div>
 ```
 
-_./src/clients/client.list.component.ts_
+_./src/client/list/client.list.component.ts_
 
 ```javascript
 export const ClientListComponent = {
@@ -219,7 +234,7 @@ export const routing = ($locationProvider: angular.ILocationProvider,
       }
     );
 
-+    $stateProvider.state('clients', <ng.ui.IState>{
++    $stateProvider.state('clients', <Ng1StateDeclaration>{
 +        url: '/clients',
 +        views: {
 +            'content@': { template: '<clientlist></clientlist>' }
