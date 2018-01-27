@@ -261,10 +261,10 @@ describe('LoginPage', () => {
 // ...
 
 +  it('doLogin method calls LoginService.validateLogin', () => {        
-+    const component = this.$componentController('loginPage');    
++    const controller = this.$componentController('loginPage');    
 +    spyOn(this.loginService, 'validateLogin').and.callThrough();
 +
-+    component.doLogin('admin', 'test');
++    controller.doLogin('admin', 'test');
 +
 +    expect(this.loginService.validateLogin).toHaveBeenCalled();
 +  })  

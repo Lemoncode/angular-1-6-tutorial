@@ -4,34 +4,48 @@ import { LoginModule } from './index'
 
 describe('LoginPage', () => {
 
-    let $componentController;
+  let $componentController;
+  let loginService;
 
-    beforeEach(() => {
-        // load the login Module
-        window['module'](LoginModule.name);
-    });
+  beforeEach(() => {
+    // load the login Module
+    window['module'](LoginModule.name);
 
-    beforeEach(inject((_$componentController_) => {
-        this.$componentController = _$componentController_;
-
-    }));
-
-    it('is registered', () => {
-        // Extract the component controller from the login page
-        const controller = this.$componentController('loginPage');
-
-        expect(controller).toBeDefined();
+    window['module']($provide => {
+      $provide.value('LoginService', {
+        validateLogin: (user: string, pwd: string) => {
+          return {
+            then: (fresult) => fresult(true)
+          }
+        }
+      });
     })
+  });
 
-    it('has defined doLogin method', () => {
-        const controller = this.$componentController('loginPage');
+  beforeEach(inject((_$componentController_, _LoginService_) => {
+    this.$componentController = _$componentController_;
+    this.loginService = _LoginService_;
+  }));
 
-        expect(controller.doLogin).toBeDefined();
-    })
+  it('is registered', () => {
+    // Extract the component controller from the login page
+    const controller = this.$componentController('loginPage');
 
-    it('execute doLogin method', () => {
-        const controller = this.$componentController('loginPage');
-    
-        expect(controller.doLogin('admin', 'test')).toBeDefined();
-    })    
+    expect(controller).toBeDefined();
+  })
+
+  it('has defined doLogin method', () => {
+    const controller = this.$componentController('loginPage');
+
+    expect(controller.doLogin).toBeDefined();
+  })
+
+  it('execute doLogin method', () => {
+    const controller = this.$componentController('loginPage');
+    spyOn(this.loginService, 'validateLogin').and.callThrough();
+
+    controller.doLogin('admin', 'test');
+
+    expect(this.loginService.validateLogin).toHaveBeenCalled();
+  })
 });
