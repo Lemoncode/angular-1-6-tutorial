@@ -2,8 +2,9 @@
 export class LoginService {
   $q: angular.IQService = null;
 
-  constructor($q: angular.IQService) { 
-    "ngInject";   
+  constructor($q: angular.IQService) {  
+    "ngInject";
+
     this.$q = $q;
   }
 
@@ -16,3 +17,5 @@ export class LoginService {
     return deferred.promise;
   }
 }
+
+LoginService.$inject = ['$q'];
