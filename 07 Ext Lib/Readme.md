@@ -477,3 +477,9 @@ _./src/app/components/login/login.page.controller.ts_
 ```
 
 > If you are not using ngInject remember to add LoginPageController.$inject = ['LoginService', 'toastr', '$state'];
+
+- It's time to test it
+
+```
+npm start
+```

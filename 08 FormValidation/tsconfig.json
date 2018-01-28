@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "sourceMap": true,
+    "types": [
+      "jasmine",
+       "webpack-env",
+       "angular-mocks"       
+    ],          
+    "jsx": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "noLib": false,
+    "preserveConstEnums": true,
+    "suppressImplicitAnyIndexErrors": true
+  },
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules"
+  ]
+}
