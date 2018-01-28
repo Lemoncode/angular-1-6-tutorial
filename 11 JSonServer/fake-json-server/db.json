@@ -1,0 +1,17 @@
+{
+  "clients": [
+    {
+      "name": "Soccer stars",
+      
+      "status": "Pending presenting new materials."
+    },
+    {
+      "name": "We Run",      
+      "status": "New running shoes avalable, interested in eva models."
+    },    
+    {
+      "name": "Multi sports",      
+      "status": "Not accepting new orders til summer."
+    }       
+  ]
+}
