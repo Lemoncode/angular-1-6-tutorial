@@ -222,5 +222,236 @@ _./src/app/components/client/list/result/client.list.result.component.html_
 </div>
 ```
 
+- Now that we have everything working with mock data is time to read from the rest-api source.
+
+- We will create under api a subfolder called _model_ and we will create there the client entity (Rest api context).
+
+_./src/app/api/model/client.ts_
+
+```javascript
+export interface Client {
+  id : string,
+  name : string,
+  status : string,
+}
+```
+
+- Now let's create a service that will read form the rest-api the list of clients.
+
+_./src/app/api/clientApi.ts_
+
+```javascript
+import { Client } from "./model/client";
+
+
+export class ClientApiService {
+  $http: angular.IHttpService = null;
+
+  constructor($http: angular.IHttpService, private $q : angular.IQService) {  
+    "ngInject";
+
+    this.$http = $http;
+  }
+
+  public getClientList(): angular.IPromise<Client[]> {
+    const deferred = this.$q.defer<Client[]>();
+
+    // TODO This could be configured, baseURL and environment variable in webpack
+    this.$http.get('http://localhost:3000/clients').then(
+      (result) => {
+        const clients =  result.data as Client[];
+        deferred.resolve(clients);
+      }
+    );
+    return deferred.promise;
+  }
+}
+
+clientApiService.$inject = ['$http','$q'];
+```
+- Let's register this service.
+
+_./src/app/api/index.ts_
+
+```diff
+import * as angular from 'angular';
+import { LoginService } from './login';
++ import { ClientApiService } from './clientApi';
+
+export const ApiModule = angular.module('api', [
+  ])
+  .service('LoginService', LoginService)
++  .service('ClientApiService', ClientApiService)
+;
+```
+- Time to go to the clientlist module and import api module.
+
+_./src/app/components/client/list/index.ts_
+
+```diff
+import * as angular from 'angular';
+import { ClientListComponent } from './client.list.component';
+import { ClientListSearchComponent } from './search/client.list.search.component';
+import { ClientListResultComponent } from './result/client.list.result.component';
+import { ClientListCardComponent } from './result/client.list.card.component'
+import { ClientListPage } from './client.list.page';
++ import { ApiModule } from '../../../api';
+
+export const ClientListModule = angular.module('clientlist', [
++  ApiModule.name
+  ])
+  .component('clientlist', ClientListComponent)
+
+```
+
+- Let's instantiate it in our clientPageController and request the data.
+
+_./src/app/components/client/list/client.list.page.controlller.ts_
+
+```diff
+import {Client} from './viewModel';
++ import { ClientApiService } from '../../../api/clientApi';
+
+export class ClientListPageController {
+    clientList : Client[];
++    clientApiService : ClientApiService;
+
+    constructor(ClientApiService : ClientApiService) {
+      "ngInject";
+
++      this.clientApiService = ClientApiService;
+    }
+
+    $onInit = () => {
++      this.clientApiService.getClientList().then(
++        (clients) => {
++          console.log(clients);
++        }
++      )
+
+      this.clientList = [
+        {
+          id : '1',
+          name : 'fake client A',
+          status : 'fake status client A',
+        },
+        {
+          id : '1',
+          name : 'fake client A',
+          status : 'fake status client A',
+        },        
+      ]
+    }    
+}
+```
+
+- Let's do a quick test to check that everything is working fine.
+
+```cmd
+npm start
+```
+
+- Now we need a mapper to convert from the model entity to the viewmodel one
+(in this case both entities match so not much to do).
+
+_./src/app/components/client/list/mapper.ts_
+
+```javascript
+import * as model from '../../../api/model/client';
+import * as vm from "./viewModel";
+
+
+export class ClientListMapper {
+
+  constructor() {  
+    "ngInject";    
+  }
+
+  public ClientFromModelToVm(clientModel : model.Client ): vm.Client {
+    return {
+      ...clientModel
+    }
+  }
+
+  public ClientListFromModelToVm(clientListModel : model.Client[]) : vm.Client[] {
+    return clientListModel.map(this.ClientFromModelToVm);
+  }
+}
+```
+
+- Let's register this new service
+
+_./src/app/components/client/list/index.ts_
+
+```diff
+import * as angular from 'angular';
+import { ClientListComponent } from './client.list.component';
+import { ClientListSearchComponent } from './search/client.list.search.component';
+import { ClientListResultComponent } from './result/client.list.result.component';
+import { ClientListCardComponent } from './result/client.list.card.component'
+import { ClientListPage } from './client.list.page';
+import { ApiModule } from '../../../api';
++ import { ClientListMapper } from './mapper';
+
+export const ClientListModule = angular.module('clientlist', [
+  ApiModule.name
+  ])
+  .component('clientlist', ClientListComponent)
+  .component('clientlistsearchcomponent', ClientListSearchComponent)
+  .component('clientlistresultcomponent', ClientListResultComponent)
+  .component('clientlistcardcomponent', ClientListCardComponent) 
+  .component('clientListComponent', ClientListComponent)   
+  .component('clientListPage', ClientListPage)  
++  .service('clientListMapper', ClientListMapper)       
+;
+```
+
+- Next step instantiate in the page controller, and replace mock data with real data.
+
+_./src/app/components/client/list/client.list.page.controller.ts_
+
+```diff
+import {Client} from './viewModel';
+import { ClientApiService } from '../../../api/clientApi';
++ import { ClientListMapper } from './mapper';
+
+export class ClientListPageController {
+    clientList : Client[];
+    clientApiService : ClientApiService;
++    clientListMapper : ClientListMapper;
+
+-    constructor(ClientApiService : ClientApiService) {
++    constructor(ClientApiService : ClientApiService, clientListMapper : ClientListMapper) {
+      "ngInject";
+
+      this.clientApiService = ClientApiService;
++      this.clientListMapper = clientListMapper;      
+    }
+
+    $onInit = () => {
++      this.clientApiService.getClientList().then(
++        (clients) => {
++          this.clientList = this.clientListMapper.ClientListFromModelToVm(clients);          
++        }
++      )
+
+-      this.clientList = [
+-        {
+-          id : '1',
+-          name : 'fake client A',
+-          status : 'fake status client A',
+-        },
+-        {
+-          id : '1',
+-          name : 'fake client A',
+-          status : 'fake status client A',
+-        },        
+-      ]
+    }    
+}
+
+ClientListPageController.$inject = ['ClientApiService', 'clientListMapper'];      
+```
+
 > Excercise let's play with Search functionallity
 
