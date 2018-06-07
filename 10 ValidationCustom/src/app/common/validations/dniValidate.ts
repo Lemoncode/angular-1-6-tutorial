@@ -2,7 +2,10 @@ import { DNIService } from './dniService';
 
 
 export class dniValidate implements angular.IDirective {
-  public link: (scope: angular.IScope, elem: ng.IAugmentedJQuery, attrs: angular.IAttributes, ngModel: angular.INgModelController) => void;
+  public link: (scope: angular.IScope, 
+                elem: ng.IAugmentedJQuery, 
+                attrs: angular.IAttributes, 
+                ngModel: angular.INgModelController) => void;
   restrict = 'A';
   require = 'ngModel';
 

@@ -1,15 +1,18 @@
 {
   "clients": [
     {
+      "id": "1",
       "name": "Soccer stars",
       
       "status": "Pending presenting new materials."
     },
     {
+      "id": "2",
       "name": "We Run",      
       "status": "New running shoes avalable, interested in eva models."
     },    
     {
+      "id": "3",
       "name": "Multi sports",      
       "status": "Not accepting new orders til summer."
     }       

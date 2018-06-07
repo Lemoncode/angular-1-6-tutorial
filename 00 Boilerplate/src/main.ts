@@ -1,3 +1,4 @@
-const App = console.log('Hello from ts');
+const App = console.log(`Hello 
+from ts`);
 
 export default App;
