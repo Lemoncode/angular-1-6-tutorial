@@ -16,7 +16,6 @@ _./src/app/components/login/login.html_
 
 _./src/app/components/login/login.component.ts_
 ```javascript
-
 export const LoginComponent = {
   template: require('./login.html') as string
 };
@@ -36,7 +35,6 @@ export const LoginModule = angular.module('login', [
   .component('login', LoginComponent)
 ;
 ```
-
 
 
 - All this components will be wrapped in a components module.
