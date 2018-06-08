@@ -103,6 +103,14 @@ npm install @types/webpack-env --save-dev
 ```
 - Now it's time to create a module and register our brand new _AppComponent_
 
+_./src/app/app.component.ts_
+
+```javascript
+export const AppComponent = {
+  template: require('./app.html') as string
+};
+```
+
 _./src/app/app.ts_
 
 ```javascript
