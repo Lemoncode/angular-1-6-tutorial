@@ -1,7 +1,7 @@
 var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 var basePath = __dirname;
 
@@ -32,24 +32,29 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        exclude: /node_modules/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            { loader: 'css-loader', },
-            { loader: 'sass-loader', },
-          ],
-        }),
+        exclude: /node_modules/,        
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader', 
+            options: {
+              modules: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]',
+              camelCase: true
+            }
+          },
+          {
+            loader: 'sass-loader',
+          },
+        ],        
       },
       {
         test: /\.css$/,
         include: /node_modules/,
-        loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: {
-            loader: 'css-loader',
-          },
-        }),
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader"
+        ]       
       },
       // Loading glyphicons => https://github.com/gowravshekar/bootstrap-webpack
       // Using here url-loader and file-loader
@@ -87,13 +92,9 @@ module.exports = {
       $: "jquery",
       jQuery: "jquery"
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'manifest'],
-    }),
-    new ExtractTextPlugin({
-      filename: '[chunkhash].[name].css',
-      disable: false,
-      allChunks: true,
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: "[id].css"
     }),
   ],
 };
