@@ -127,7 +127,7 @@ _./src/app/app.ts_
 
 ```diff
   import * as angular from 'angular';
-+ import { routing } from './app.routes'
++ import { routing } from './app.routes';
   import {AppComponent} from './app.component';
   import { components } from './components'
 
@@ -163,7 +163,7 @@ npm start
 - It's time to move forward using the ui-router, we will create a second page and add a 
 navigation link from login page to that second page.
 
-_./src/client/list/clientlist.html_
+_./src/components/client/list/clientlist.html_
 
 ```javascript
 <div>
@@ -171,7 +171,7 @@ _./src/client/list/clientlist.html_
 </div>
 ```
 
-_./src/client/list/client.list.component.ts_
+_./src/components/client/list/client.list.component.ts_
 
 ```javascript
 export const ClientListComponent = {

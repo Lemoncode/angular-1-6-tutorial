@@ -31,6 +31,7 @@ export const routing = ($locationProvider: angular.ILocationProvider,
   }
   );
 
+
   $urlRouterProvider.otherwise('/home');
 
 }
