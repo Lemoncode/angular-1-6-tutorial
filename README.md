@@ -1,4 +1,4 @@
-# angular 1.6 + Typescript by sample
+# Angular 1.6 + Typescript by sample
 
 If in your company you have to stick to angular 1, got no chances to migrate to React or Angular 6, but at least you can use latest 
 1.X version plus typescript, this is your starting point.
