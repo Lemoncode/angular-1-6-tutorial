@@ -1,17 +1,18 @@
 var webpackConfig = require('./webpack.config');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine'],
-    files: [      
-      'spec.bundle.js'      
+    files: [
+      'spec.bundle.js'
     ],
     exclude: [],
     plugins: [
-      require("karma-jasmine"),     
-      require("karma-chrome-launcher"),       
+      require("karma-jasmine"),
+      require("karma-chrome-launcher"),
       require("karma-spec-reporter"),
       require("karma-sourcemap-loader"),
       require("karma-webpack")
@@ -32,34 +33,39 @@ module.exports = function(config) {
             exclude: /node_modules/,
             loader: 'awesome-typescript-loader',
             options: {
-                useBabel: true
-              }        
+              useBabel: true
+            }
           },
-          { 
+          {
             test: /\.html$/,
             exclude: /node_modules/,
             loader: 'raw-loader'
-          },      
+          },
           {
             test: /\.scss$/,
             exclude: /node_modules/,
-            loader: ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: [
-                { loader: 'css-loader', },
-                { loader: 'sass-loader', },
-              ],
-            }),
+            use: [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: true,
+                  localIdentName: '[name]__[local]___[hash:base64:5]',
+                  camelCase: true
+                }
+              },
+              {
+                loader: 'sass-loader',
+              },
+            ],
           },
           {
             test: /\.css$/,
             include: /node_modules/,
-            loader: ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: {
-                loader: 'css-loader',
-              },
-            }),
+            use: [
+              MiniCssExtractPlugin.loader,
+              "css-loader"
+            ]
           },
           // Loading glyphicons => https://github.com/gowravshekar/bootstrap-webpack
           // Using here url-loader and file-loader
@@ -81,7 +87,7 @@ module.exports = function(config) {
           },
         ],
       }
-    },    
+    },
     webpackServer: {
       noInfo: true // prevent console spamming when running in Karma!
     },

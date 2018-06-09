@@ -1,8 +1,7 @@
-
 export class LoginService {
   $q: angular.IQService = null;
 
-  constructor($q: angular.IQService) {    
+  constructor($q: angular.IQService) {
     this.$q = $q;
   }
 

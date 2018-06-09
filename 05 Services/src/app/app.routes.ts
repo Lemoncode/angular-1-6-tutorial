@@ -1,9 +1,9 @@
-import * as angular from 'angular';
 import { StateProvider, UrlRouterProvider, Ng1StateDeclaration } from '@uirouter/angularjs'
 
 
 // https://github.com/ngParty/ng-metadata/issues/206
-export const routing = ($locationProvider: angular.ILocationProvider,
+export const routing =
+($locationProvider: angular.ILocationProvider,
   $stateProvider: StateProvider,
   $urlRouterProvider: UrlRouterProvider
 
@@ -31,6 +31,9 @@ export const routing = ($locationProvider: angular.ILocationProvider,
   }
   );
 
+
   $urlRouterProvider.otherwise('/home');
 
-}
+};
+
+routing.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
