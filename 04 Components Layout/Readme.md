@@ -5,8 +5,28 @@ Before starting the real code (access to services, binding...) is a good idea to
 In this sample we will build the login and clients layout. To build this layout we are going to follow a thumb-rule:components that are "page" like will be built using bootstrap grid css, components that are small and likely to be reused, we will use flexbox to build that layout (try to have the lest dependency with external framework 
 dependencies).
 
+- First of all we are going to ensure that we are referencing the bootstrap CSS library.
+
+_./webpack.config.js_
+
+```diff
+  entry: {
+    app: './app/app.ts',
+    vendor: [
+      'angular',        
+      '@uirouter/angularjs',
+    ],    
+    appStyles: [
++      '../node_modules/bootstrap/dist/css/bootstrap.css',
+      './mystyles.scss',       
+    ]
+  },
+```
+
 - Let's start with the login, for this component we will take it easy, just grab a sample from _bootsnnip_ 
 and paste it.
+
+_./src/app/components/login/login.html_
 
 ```diff
 <div>
@@ -210,6 +230,7 @@ export const ClientListCardComponent = {
 
 - Time to jump back to the template and add the bindings
 
+_./src/app/components/client/list/result.client.list.card.component.html_
 
 ```diff
   <div class="panel panel-default" style="height: 80px">
@@ -223,7 +244,7 @@ export const ClientListCardComponent = {
 
 - Let's register this new component
 
-_./src/app/components/client/list_
+_./src/app/components/client/list/index.ts_
 
 ```diff
 import * as angular from 'angular';
@@ -268,4 +289,21 @@ _./src/app/components/client/list/result/client.list.result.component.html_
 
 ```cmd
 npm start
+```
+
+- Duplicates angular:
+
+https://github.com/webpack/webpack/issues/6598
+
+```diff
+module.exports = {
+  context: path.join(basePath, 'src'),
+  resolve: {
+    extensions: ['.js', '.ts'],
+  },
++  optimization: {
++    runtimeChunk: 'single'
++  },
+  entry: {
+
 ```
