@@ -6,15 +6,12 @@
   "scripts": {
     "start": "webpack-dev-server --mode development --inline",
     "build": "webpack --mode development",
-    "test": "karma start --no-single-Run",
-    "test:single": "karma start --single-Run"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/angular": "^1.6.45",
-    "@types/angular-mocks": "^1.5.11",
-    "@types/jasmine": "^2.8.8",
     "@types/webpack-env": "^1.13.6",
     "awesome-typescript-loader": "^5.0.0",
     "babel-core": "^6.26.3",
@@ -22,14 +19,6 @@
     "css-loader": "^0.28.11",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
-    "jasmine": "^2.9.0",
-    "jasmine-core": "^2.9.1",
-    "karma": "^2.0.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-jasmine": "^1.1.1",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-spec-reporter": "0.0.32",
-    "karma-webpack": "^2.0.9",
     "mini-css-extract-plugin": "^0.4.0",
     "ng-annotate-webpack-plugin": "^0.3.0",
     "node-sass": "^4.9.0",
@@ -46,7 +35,6 @@
   "dependencies": {
     "@uirouter/angularjs": "^1.0.18",
     "angular": "^1.6.3",
-    "angular-mocks": "^1.6.8",
     "bootstrap": "^3.3.7"
   }
 }

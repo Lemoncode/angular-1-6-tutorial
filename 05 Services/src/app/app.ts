@@ -3,7 +3,7 @@ import { routing } from './app.routes';
 import {AppComponent} from './app.component';
 import { components } from './components'
 
-export const app = angular.module('app', [
+angular.module('app', [
   'ui.router',
   components.name
   ])

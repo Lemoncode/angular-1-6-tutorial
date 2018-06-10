@@ -6,7 +6,6 @@
     "removeComments": true,
     "sourceMap": true,
     "types": [
-      "jasmine",
       "webpack-env"
     ],
     "jsx": "react",
