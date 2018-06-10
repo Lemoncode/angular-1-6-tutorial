@@ -100,14 +100,16 @@ export class validGithubLogin implements angular.IDirective {
 
 
   public static Factory() {
-    var directive = ($q: angular.IQService,GitHubService: GitHubService) => {
+    var directive = ['$q', 'GitHubService', ($q: angular.IQService,GitHubService: GitHubService) => {
       "ngInject";
       return new validGithubLogin($q, GitHubService);
-    };
+    }];
     
     return directive;
   }
 }
+
+GitHubService.$inject = ['$q', '$http'];
 ```
 
 - Let's register it
@@ -130,11 +132,6 @@ export const LoginModule = angular.module('login', [
   .component('loginPage', LoginPage)
 + .directive('validGithubLogin', validGithubLogin.Factory())  
 ;
-```
-
-- Let's add unit test support for this directive:
-
-```javascript
 ```
 
 - Now let's configure the error message for this validation:

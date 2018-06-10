@@ -5,5 +5,4 @@ import { GitHubService } from './github'
 export const ApiModule = angular.module('api', [
   ])
   .service('LoginService', LoginService)
-  .service('GitHubService', GitHubService)  
-;
+  .service('GitHubService', GitHubService);
