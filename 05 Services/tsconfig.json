@@ -6,9 +6,8 @@
     "removeComments": true,
     "sourceMap": true,
     "types": [
-      "jasmine",
-       "webpack-env"       
-    ],          
+      "webpack-env"
+    ],
     "jsx": "react",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": false,

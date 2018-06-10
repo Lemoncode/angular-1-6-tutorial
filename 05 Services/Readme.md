@@ -74,6 +74,8 @@ npm install jasmine-core jasmine @types/jasmine --save-dev
 
 - Let's install some angular testing helpers.
 
+//npm install angular-mocks@1.6.8
+
 ```cmd
 npm install angular-mocks @types/angular-mocks --save-dev
 ```
@@ -129,19 +131,20 @@ context.keys().forEach(context);
 _./karma.conf.js_
 ```javascript
 var webpackConfig = require('./webpack.config');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine'],
-    files: [      
-      'spec.bundle.js'      
+    files: [
+      'spec.bundle.js'
     ],
     exclude: [],
     plugins: [
-      require("karma-jasmine"),     
-      require("karma-chrome-launcher"),       
+      require("karma-jasmine"),
+      require("karma-chrome-launcher"),
       require("karma-spec-reporter"),
       require("karma-sourcemap-loader"),
       require("karma-webpack")
@@ -162,34 +165,39 @@ module.exports = function(config) {
             exclude: /node_modules/,
             loader: 'awesome-typescript-loader',
             options: {
-                useBabel: true
-              }        
+              useBabel: true
+            }
           },
-          { 
+          {
             test: /\.html$/,
             exclude: /node_modules/,
             loader: 'raw-loader'
-          },      
+          },
           {
             test: /\.scss$/,
             exclude: /node_modules/,
-            loader: ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: [
-                { loader: 'css-loader', },
-                { loader: 'sass-loader', },
-              ],
-            }),
+            use: [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: 'css-loader',
+                options: {
+                  modules: true,
+                  localIdentName: '[name]__[local]___[hash:base64:5]',
+                  camelCase: true
+                }
+              },
+              {
+                loader: 'sass-loader',
+              },
+            ],
           },
           {
             test: /\.css$/,
             include: /node_modules/,
-            loader: ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: {
-                loader: 'css-loader',
-              },
-            }),
+            use: [
+              MiniCssExtractPlugin.loader,
+              "css-loader"
+            ]
           },
           // Loading glyphicons => https://github.com/gowravshekar/bootstrap-webpack
           // Using here url-loader and file-loader
@@ -211,7 +219,7 @@ module.exports = function(config) {
           },
         ],
       }
-    },    
+    },
     webpackServer: {
       noInfo: true // prevent console spamming when running in Karma!
     },
@@ -303,14 +311,15 @@ describe('login', () => {
 
 - Now let's define a basic login service (no promises yet) and add a proper test.
 
-_./src/app/login.ts_
+_./src/app/api/login.ts_
 
 ```javascript
 export class LoginService {
   constructor() {
   }
 
-  public validateLogin(user : string, pwd: string) : boolean {    
+  public validateLogin(user : string, pwd: string) : boolean { 
+    return false;   
   }
 }
 ```
@@ -336,7 +345,7 @@ Jumping into the specs:
 ```diff
 import { LoginService } from "./login"
 
-describe('login', () => {
++ describe('login', () => {
   describe('performLogin', () => {
     it('Login Service exists', () => {    
       const loginService = new LoginService();
@@ -352,8 +361,8 @@ describe('login', () => {
 
 +      expect(result).toBeTruthy();
 +    })
-  })
-})
++  })
++ })
 ```
 
 - Now let's add the functionallity 
@@ -446,7 +455,7 @@ export class LoginService {
 - It's time to use mocking let's install angular mocks
 
 ```
-npm install @types/angular-mocks --save-dev
+npm install angular-mocks @types/angular-mocks --save-dev
 ```
 
 - Let's update the tests:
@@ -455,7 +464,7 @@ npm install @types/angular-mocks --save-dev
 later on we will have to add a refactor for this. What can we do? Create a real API, or 
 create a fake on but really hit $http service.
 
-_./src/app/login.ts_
+_./src/app/api/login.ts_
 
 ```diff
 export class LoginService {

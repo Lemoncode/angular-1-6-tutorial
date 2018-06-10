@@ -54,81 +54,7 @@ export const LoginModule = angular.module('login', [
 ;
 ```
 
-- Start testing that the loginPage component exists.
-
-_./src/app/components/login/login.page.spec.ts_
-
-```javascript
-import * as angular from 'angular'
-import {} from 'angular-mocks';
-import {LoginModule} from './index'
-
-describe('LoginPage', () => {
-
-  let $componentController;
-
-  beforeEach(() => {
-    // load the login Module
-    window['module'](LoginModule.name);
-  });
-
-  beforeEach(inject((_$componentController_) => {
-    this.$componentController = _$componentController_;
-
-  }));
-
-  it('is registered', () => {    
-    // Extract the component controller from the login page
-    const controller = this.$componentController('loginPage');    
-
-    expect(controller).toBeDefined();
-  })  
-});
-```
-
-- This loginPage will expose a method to perform a login (and
-will be consumed by login.component), but let's start defininng a
-failing test for this.
-
-_./src/app/components/login/login.page.spec.ts_
-
-```diff
-import * as angular from 'angular'
-import {} from 'angular-mocks';
-import {LoginModule} from './index'
-
-describe('LoginPage', () => {
-
-  let $componentController;
-
-  beforeEach(() => {
-    // load the login Module
-    window['module'](LoginModule.name);
-  });
-
-  beforeEach(inject((_$componentController_) => {
-    this.$componentController = _$componentController_;
-
-  }));
-
-  it('is registered', () => {    
-    // Extract the component controller from the login page
-    const controller = this.$componentController('loginPage');    
-
-    expect(controller).toBeDefined();
-  })  
-
-+  it('has defined doLogin method', () => {        
-+    const controller = this.$componentController('loginPage');    
-+
-+    expect(controller.doLogin).toBeDefined();
-+  })  
-
-});
-```
-
-- This test fails as expected, let's implement the doLogin method in the 
-loginPageController.
+- Let's define a DoLoginMethod
 
 ```diff
 export class LoginPageController {
@@ -168,8 +94,8 @@ _./src/app/components/login/index.ts_
 ```diff
 import * as angular from 'angular';
 import { LoginComponent } from './login.component';
-import { LoginPage } from './login.page'
-+ import { ApiModule } from '../../api/index'
+import { LoginPage } from './login.page';
++ import { ApiModule } from '../../api/index';
 
 export const LoginModule = angular.module('login', [
 +  ApiModule.name
@@ -212,64 +138,148 @@ export class LoginPageController {
 }
 ```
 
-- Let's add a test case, invoking login result
+- Let's replace in the app routes the current component that we are using for 
+the login route with the new login page.
 
-_./src/app/components/login/login.page.spec.ts_
-```diff
-it('execute doLogin method', () => {
-    const controller = this.$componentController('loginPage');
-
-    expect(controller.doLogin('admin', 'test')).toBeDefined();
-})
-```
-
-- Now if we see the test we get red lights, we need to import
-this module depency in the tests as well.
-
-_./src/app/components/login/login.page.spec.ts_
+_./src/app/app.routes.ts_
 
 ```diff
-import * as angular from 'angular'
-import {} from 'angular-mocks';
-import {LoginModule} from './index'
+  $stateProvider.state('home', <Ng1StateDeclaration>{
+    url: '/home',
+    views: {
+-      'content@': { template: '<login></login>' }
++      'content@': { template: '<login-page></login-page>' }
+    }
+  }
+  );
+}]
+```
 
-describe('LoginPage', () => {
-
-  let $componentController;
-+ let loginService;
-
-  beforeEach(() => {    
-    window['module'](LoginModule.name);
-
-+    window['module']($provide => {
-+      $provide.value('LoginService', {
-+        validateLogin: (user : string, pwd: string) => {
-+          return {
-+            then: (fresult) => fresult(true)      
-+          }
-+        }
-+      });
-+    })    
-  });
-
--  beforeEach(inject((_$componentController_) => {
-+  beforeEach(inject((_$componentController_, _LoginService_) => {
-    this.$componentController = _$componentController_;
-+    this.loginService = _LoginService_;
-  }));
-  
-// ...
-
-+  it('doLogin method calls LoginService.validateLogin', () => {        
-+    const controller = this.$componentController('loginPage');    
-+    spyOn(this.loginService, 'validateLogin').and.callThrough();
-+
-+    controller.doLogin('admin', 'test');
-+
-+    expect(this.loginService.validateLogin).toHaveBeenCalled();
-+  })  
+- Let's make a quick check and ensure the site is still working (no console log yet).
 
 ```
+npm start
+```
+
+- Time to move on: we need to hook the _doLogin_ method in the page with the button on
+the login component, let's go step by step.
+
+- First let's expose a callback parameter to our loginComponent and define the fields that will be binded to our form fields (user and password).
+
+_./src/app/components/login.component.ts_
+
+```diff
+export const LoginComponent = {
+  template: require('./login.html') as string
++  bindings: {
++    onDoLogin: '&'    
++  },
++  controllerAs: 'vm',
++  controller: class LoginController {
++    user :string;
++    password : string;
++
++    $onInit = () => {
++      this.user = '';
++      this.password = '';
++    }
++  }  
+};
+```
+
+- Now in the component HTML, in the button tag let's call that param with some harcoded info:
+
+_src/app/components/login.html_
+
+```diff
+- <button type="submit" class="btn btn-sm btn-default">Sign in</button>
++ <button type="submit" class="btn btn-sm btn-default" ng-click="vm.onDoLogin({user:'bad', pass:'user'})">Sign in</button>
+```
+
+- And in the login page let's tie together the controller DoLogin on the component on-do-login event.
+
+_./src/app/components/login.page.ts_
+
+```diff
+import { LoginPageController as controller } from './login.page.controller'
+
+export const LoginPage = {
+-  template: '<login/>',
++ template: '<login on-do-login="vm.doLogin(user, pass)"/>',
+  controller,
+  controllerAs: 'vm'
+};
+```
+
+- Now let's give a try and check what happens when we click.
+
+```
+npm start
+```
+
+- Errors? Yeah (open console), ngInject seems not to be working as expected (it's an abandoned projects
+there's a fork to patch and loader but not quite maintained), let's manually hook this 
+injects, let's place this line of code at the bottom of our file.
+
+_./src/app/components/login/login.page.controller.ts_
+
+```javascript
+LoginPageController.$inject = ['LoginService'];
+``` 
+
+- Same happens with _LoginService_, are you able to fix this without taking a look at
+the solution?
+
+_./src/app/api/login.ts_
+
+```
+LoginService.$inject = ['$q'];
+```
+
+- Let's bind now real time information from the form inputs, remember that in the component we have defined
+
+_./src/components/login/login.component.ts_
+
+```javascript
+  controller: class LoginController {
+    user: string;
+    password: string;
+```
+- We can bind this in the inputs and pass that info the OnDoLogin
+
+```diff
+  <form role="form">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Username or Email</label>
+-      <input class="form-control" style="border-radius:0px" id="exampleInputEmail1" placeholder="Enter email">
++      <input class="form-control" style="border-radius:0px" id="exampleInputEmail1" placeholder="Enter email"
++       ng-model="vm.user">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password
+        <a href="/sessions/forgot_password">(forgot password)</a>
+      </label>
+-      <input type="password" class="form-control" style="border-radius:0px" id="exampleInputPassword1" placeholder="Password">
++      <input type="password" class="form-control" style="border-radius:0px" id="exampleInputPassword1" placeholder="Password"
++       ng-model="vm.password">
+    </div>
+-    <button type="submit" class="btn btn-sm btn-default" ng-click="vm.onDoLogin({user:'bad', pass:'user'})">Sign in</button>
++     <button type="submit" class="btn btn-sm btn-default" 
++      ng-click="vm.onDoLogin({user:vm.user, pass: vm.password})">Sign in</button>
+  </form>
+```
+
+- Let's give a try and check that entering the key pair 'admin'/'test' on the login
+form inputes we get a success message on the console log.
+
+```
+npm start
+```
+
+> We will get an error here !!! 'user' will be undefined, what's going on here?
+Time to review and lear from what we have done, and finally realize it was an stupid
+bug, if we use the type "email" in the login input validation will be thrown and
+data won't be propagated we have to remove that here.
 
 
 
