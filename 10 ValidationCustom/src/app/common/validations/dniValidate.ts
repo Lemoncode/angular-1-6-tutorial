@@ -2,13 +2,9 @@ import { DNIService } from './dniService';
 
 
 export class dniValidate implements angular.IDirective {
-  public link: (scope: angular.IScope, 
-                elem: ng.IAugmentedJQuery, 
-                attrs: angular.IAttributes, 
-                ngModel: angular.INgModelController) => void;
+  public link: (scope: angular.IScope, elem: ng.IAugmentedJQuery, attrs: angular.IAttributes, ngModel: angular.INgModelController) => void;
   restrict = 'A';
   require = 'ngModel';
-
 
   constructor(DNIService: DNIService)
   {
@@ -24,7 +20,7 @@ export class dniValidate implements angular.IDirective {
 
 
   public static Factory() {
-    var directive = ['DNIService', (DNIService: DNIService) => {
+    var directive = ['DNIService',(DNIService: DNIService) => {
       "ngInject";
       return new dniValidate(DNIService);
     }];
