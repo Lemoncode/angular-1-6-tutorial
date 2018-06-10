@@ -6,10 +6,8 @@
     "removeComments": true,
     "sourceMap": true,
     "types": [
-      "jasmine",
-       "webpack-env",
-       "angular-mocks"       
-    ],          
+      "webpack-env"
+    ],
     "jsx": "react",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": false,
