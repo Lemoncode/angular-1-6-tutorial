@@ -116,7 +116,7 @@ export class LoginPageController {
              toastr : angular.toastr.IToastrService,
 +             $state: StateService
              ) {
-    "ngInject";
+    "ngInject"; // Wrong go to bottom injector
 
     this.loginService = LoginService;
     this.toastr = toastr;
@@ -137,6 +137,10 @@ _./src/app/components/login/login.page.controller.ts_
 +            this.$state.go('clients');            
          } else {
 
+
+// ...
+- LoginPageController.$inject = ['LoginService', 'toastr'];
++ LoginPageController.$inject = ['LoginService', 'toastr', '$state'];
 ```
 
 > If you are not using ngInject remember to add LoginPageController.$inject = ['LoginService', 'toastr', '$state'];
