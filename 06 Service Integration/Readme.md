@@ -236,6 +236,50 @@ _./src/app/api/login.ts_
 LoginService.$inject = ['$q'];
 ```
 
+- Let's bind now real time information from the form inputs, remember that in the component we have defined
+
+_./src/components/login/login.component.ts_
+
+```javascript
+  controller: class LoginController {
+    user: string;
+    password: string;
+```
+- We can bind this in the inputs and pass that info the OnDoLogin
+
+```diff
+  <form role="form">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Username or Email</label>
+-      <input class="form-control" style="border-radius:0px" id="exampleInputEmail1" placeholder="Enter email">
++      <input class="form-control" style="border-radius:0px" id="exampleInputEmail1" placeholder="Enter email"
++       ng-model="vm.user">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password
+        <a href="/sessions/forgot_password">(forgot password)</a>
+      </label>
+-      <input type="password" class="form-control" style="border-radius:0px" id="exampleInputPassword1" placeholder="Password">
++      <input type="password" class="form-control" style="border-radius:0px" id="exampleInputPassword1" placeholder="Password"
++       ng-model="vm.password">
+    </div>
+-    <button type="submit" class="btn btn-sm btn-default" ng-click="vm.onDoLogin({user:'bad', pass:'user'})">Sign in</button>
++     <button type="submit" class="btn btn-sm btn-default" 
++      ng-click="vm.onDoLogin({user:vm.user, pass: vm.password})">Sign in</button>
+  </form>
+```
+
+- Let's give a try and check that entering the key pair 'admin'/'test' on the login
+form inputes we get a success message on the console log.
+
+```
+npm start
+```
+
+> We will get an error here !!! 'user' will be undefined, what's going on here?
+Time to review and lear from what we have done, and finally realize it was an stupid
+bug, if we use the type "email" in the login input validation will be thrown and
+data won't be propagated we have to remove that here.
 
 
 
