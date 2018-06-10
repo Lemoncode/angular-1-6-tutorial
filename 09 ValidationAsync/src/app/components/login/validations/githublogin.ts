@@ -8,7 +8,7 @@ export class validGithubLogin implements angular.IDirective {
 
 
   constructor($q: angular.IQService, GitHubService: GitHubService)
-  {    
+  {
     validGithubLogin.prototype.link = (scope: ng.IScope, element: ng.IAugmentedJQuery, attrs: ng.IAttributes, ngModel: angular.INgModelController) =>
     {
        
@@ -32,7 +32,7 @@ export class validGithubLogin implements angular.IDirective {
 
 
   public static Factory() {
-    var directive = ['$q', 'GitHubService', ($q: angular.IQService,GitHubService: GitHubService) => {
+    var directive = ['$q', 'GitHubService', ($q: angular.IQService, GitHubService: GitHubService) => {
       "ngInject";
       return new validGithubLogin($q, GitHubService);
     }];

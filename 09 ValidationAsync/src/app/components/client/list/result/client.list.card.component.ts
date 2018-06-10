@@ -1,3 +1,4 @@
+
 export const ClientListCardComponent = {
   bindings: {
     client: '<',

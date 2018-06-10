@@ -3,7 +3,6 @@ export class GitHubService {
     "ngInject";
   }
 
-
   public acccountExists(login : string) : angular.IPromise<boolean> {         
 
     const deferred = this.$q.defer<boolean>();    
