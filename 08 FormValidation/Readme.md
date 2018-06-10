@@ -121,6 +121,12 @@ _./src/components/login/login.html_
 </div>
 ```
 
+- Let's give a quick try to ensure we are on track.
+
+```bash
+npm start
+```
+
 - Adding a set of repeated ng-messages per page or app it's a disgusting 
 repetitive thask, could it be possible to just use a common template and
 be able to override it whenever we want to add a custom message for a 
