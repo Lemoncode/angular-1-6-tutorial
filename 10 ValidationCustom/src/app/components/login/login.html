@@ -1,7 +1,10 @@
 <script type="text/ng-template" id="form-error-messages">
     <div ng-message="required">Please inform the field</div>
+    <div ng-message="validGithubLogin">Login does not exists on Github</div>
     <div ng-message="validDNI">DNI is not valid</div>
+    <div ng-message="pattern">Pattern do not match</div>
 </script>
+
 <div>
   <div class="container" style="margin-top:30px">
     <div class="col-md-4 col-md-offset-4">
@@ -15,17 +18,15 @@
           <form role="form" name="loginForm">
             <div class="form-group">
               <label for="exampleInputEmail1">Username or Email</label>
-              <input class="form-control" 
-                     style="border-radius:0px" id="exampleInputEmail1" placeholder="Enter email" name="loginField"
-                     ng-model="vm.user" 
-                     ng-required="{true}"
-                     ng-pattern="^\d{9}\W$"
-                     dni-validate=""
-                     >
-              <div ng-messages="loginForm.loginField.$error">
-                <div ng-message="pattern">DNI is composed of 8 letters plus a word, capital letters e.g. 12345678U</div> 
+              <input name="loginField" class="form-control" style="border-radius:0px" id="exampleInputEmail1" placeholder="Enter email"
+                ng-required="{true}"
+                ng-pattern="/^\d{9}\W$/"
+                
+                ng-model="vm.user">
+              <div ng-messages="loginForm.loginField.$error">                
                 <div ng-messages-include="form-error-messages">
                 </div>
+                
               </div>
             </div>
             <div class="form-group">
@@ -33,19 +34,19 @@
                 <a href="/sessions/forgot_password">(forgot password)</a>
               </label>
               <input type="password" 
-                     class="form-control" 
-                     name="passwordField" 
-                     style="border-radius:0px" 
-                     id="exampleInputPassword1" 
-                     placeholder="Password"
-                     ng-model="vm.password" 
-                     ng-required="{true}">
+               class="form-control" style="border-radius:0px" id="exampleInputPassword1" placeholder="Password" ng-required="{true}"
+               name="passwordField"
+               ng-model="vm.password">
               <div ng-messages="loginForm.passwordField.$error">
                 <div ng-messages-include="form-error-messages">
+                    <div ng-message="pattern">DNI is composed of 8 letters plus a word, capital letters e.g. 12345678U</div>
                 </div>
+                
               </div>
             </div>
-            <button type="submit" class="btn btn-sm btn-default" ng-disabled="loginForm.$pristine || loginForm.$invalid" ng-click="vm.onDoLogin({user:vm.user, pass: vm.password})">Sign in</button>
+            <button type="submit" class="btn btn-sm btn-default" 
+              ng-disabled="loginForm.$pristine || loginForm.$invalid || loginForm.$pending" 
+              ng-click="vm.onDoLogin({user:vm.user, pass: vm.password})">Sign in</button>
           </form>
         </div>
       </div>

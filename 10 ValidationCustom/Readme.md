@@ -2,93 +2,26 @@
 
 In this sample we will add a validation that needs custom login.
 
-We will replace our github validatin with a NIF validation (login
+We will replace our github validation with a NIF validation (login
 should be a valid DNI)
 
 Summary steps:
 
 - Add a regex format validator (standard)
-- Implement the DNI validation algorithm in a service, Following TDD
-- Integrate it in a directive, add tests to this directive (mock DNI.
+- Implement the DNI validation algorithm in a service.
+- Integrate it in a directive.
 - Include it in the input field (replace github with this one).
 - Add the ng-message entry.
 
 Implementation:
 
-- Let's start by implement a DNI service that will perform the validation login, we 
-will start by implementing a test and move on implementing the service (on this
-documentation we will paste all the tests in one go, but when implementing it 
-rather follow an step by step approach).
+- Let's start by implement a DNI service that will perform the validation login.
 
-_./src/app/common/validations/dniService.spec.ts_
-
-```javascript
-import * as angular from 'angular'
-import {} from 'angular-mocks';
-import { DNIService } from './dniService';
-
-describe('dniService', () => {
-  describe('validate', () => {
-    it('dniService exists', () => {    
-      const dniService = new DNIService();
-  
-      expect(dniService).toBeDefined();
-      expect(dniService.isValid).toBeDefined();
-    })    
-  });
-
-  describe('validate', () => {
-    it('wrong format', () => {    
-      const dniService = new DNIService();
-
-      const result = dniService.isValid('whatever');
-
-      expect(result).toBeFalsy();      
-    })    
-
-    it('right dni wrong format', () => {    
-      const dniService = new DNIService();
-
-      const result = dniService.isValid('12345678 Z');
-
-      expect(result).toBeFalsy();      
-    })    
-
-    it('right dni right format', () => {    
-      const dniService = new DNIService();
-
-      const result = dniService.isValid('12345678Z');
-
-      expect(result).toBeTruthy();      
-    })    
-    
-    it('right dni right format second set', () => {    
-      const dniService = new DNIService();
-
-      const result = dniService.isValid('59858702Y');
-
-      expect(result).toBeTruthy();      
-    })    
-
-    it('right dni right format, bad value', () => {    
-      const dniService = new DNIService();
-
-      const result = dniService.isValid('12345678E');
-
-      expect(result).toBeFalsy();      
-    })    
-
-
-  });
-  
-});
-```
-
+> Talk here about clean code, extracted implementation vs current: https://donnierock.com/2011/11/05/validar-un-dni-con-javascript/
 
 _./src/app/common/validations/dniService.ts_
 
 ```javascript
-
 export class DNIService {  
   constructor() {
     "ngInject";    
@@ -196,10 +129,10 @@ export class dniValidate implements angular.IDirective {
 
 
   public static Factory() {
-    var directive = (DNIService: DNIService) => {
+    var directive = ['DNIService',(DNIService: DNIService) => {
       "ngInject";
       return new dniValidate(DNIService);
-    };
+    }];
     
     return directive;
   }
@@ -218,70 +151,6 @@ export const commonModule = angular.module('common', [
   .service('dniService', DNIService)  
 +  .directive('dniValidate', dniValidate.Factory())
 ;
-```
-
-_./src/app/common/validations/dniValidate.spec.ts_
-
-```javascript
-import * as angular from 'angular'
-import {} from 'angular-mocks';
-import { commonModule } from '../index'
-import { DNIService } from './dniService'
-
-describe('dniValidate', () => {
-  let parentScope;
-  let element;
-  let form;
-
-  beforeEach(() => {    
-      window['module'](commonModule.name);      
-
-      window['module']($provide => {
-        //public isValid(dni : string) : boolean {         
-        $provide.value('DNIService', {
-          isValid: (dni : string)  : boolean => { 
-            // just an easy fake case 1 is valid DNI, other not valid
-            return (dni === '1'); 
-          }        
-        }); 
-      });  
-    
-  });
-
-  beforeEach(inject(($compile, $rootScope) => {
-    // https://velesin.io/2016/08/23/unit-testing-angular-1-5-components/
-    // 1:
-    parentScope = $rootScope.$new();      
-    // 2:
-    element = angular.element(`
-                        <form name="testForm">                                                
-                            <input 
-                                  name="dniField"                                      
-                                  dni-validate=""
-                                  ng-model="dni"                                  
-                                  />                                                                  
-                        </form>
-    `);
-
-    $compile(element)(parentScope);
-    parentScope.$digest();
-    form = parentScope.testForm;
-  }));
-  
-  it('should be valid form if dni is valid (mocked dni service)', () => {
-      form.dniField.$setViewValue('1');
-      parentScope.$digest();
-      
-      expect(form.dniField.$error.validDNI).toBeUndefined();
-  });
-
-  it('should be invalid form if dni is not valid (mocked dni service)', () => {
-      form.dniField.$setViewValue('0');
-      parentScope.$digest();
-      
-      expect(form.dniField.$error.validDNI).toBeDefined();
-  });
-});
 ```
 
 - It's time replace the githubvalidation and use our dni validation in the login form
@@ -306,7 +175,7 @@ correct (^\d{7}\W$), then the validation that checks that the dni letter matches
       name="loginField"    
       ng-required="{true}"                                       
 -      valid-github-login=""
-+     ng-pattern="^\d{9}\W$"
++     ng-pattern="/^\d{9}\W$/"
 +     dni-validate=""
       ng-model="vm.user"
       ng-model-options="{updateOn: 'blur'}"
@@ -324,6 +193,14 @@ letters e.g. 12345678U".
   </div>
 </div>                                     
 ```
+- Let's give a try:
+
+```bash
+npm start
+```
+
+> Take a look to the implemented code there are some updates nested ng-message not
+working, but general yes.
 
 Some excercises and challenges:
 

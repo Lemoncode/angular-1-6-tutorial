@@ -4,6 +4,6 @@ import { dniValidate } from './validations/dniValidate';
 
 export const commonModule = angular.module('common', [
   ])
-  .service('DNIService', DNIService) 
-  .directive('dniValidate', dniValidate.Factory()) 
+  .service('DNIService', DNIService)  
+  .directive('dniValidate', dniValidate.Factory())
 ;
