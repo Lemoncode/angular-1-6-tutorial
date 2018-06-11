@@ -5,5 +5,4 @@ import { ClientApiService } from './clientApi';
 export const ApiModule = angular.module('api', [
   ])
   .service('LoginService', LoginService)
-  .service('ClientApiService', ClientApiService)
-;
+  .service('ClientApiService', ClientApiService);
