@@ -10,11 +10,10 @@ import { ClientListMapper } from './mapper';
 export const ClientListModule = angular.module('clientlist', [
   ApiModule.name
   ])
-  .component('clientlist', ClientListComponent)
+  .component('clientlistcomponent', ClientListComponent)
   .component('clientlistsearchcomponent', ClientListSearchComponent)
   .component('clientlistresultcomponent', ClientListResultComponent)
-  .component('clientlistcardcomponent', ClientListCardComponent) 
-  .component('clientListComponent', ClientListComponent)   
-  .component('clientListPage', ClientListPage)  
-  .service('clientListMapper', ClientListMapper)       
+  .component('clientlistcardcomponent', ClientListCardComponent)
+  .component('clientListPage', ClientListPage)
+  .service('clientListMapper', ClientListMapper)                
 ;

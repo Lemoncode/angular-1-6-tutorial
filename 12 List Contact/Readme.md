@@ -58,7 +58,7 @@ export const ClientListPage = {
 
 - Let's register the page in the index module definition.
 
-_./src/app/components/client/index.js_
+_./src/app/components/client/list/index.js_
 
 ```diff
 import * as angular from 'angular';
@@ -100,6 +100,8 @@ npm start
 ```
 
 - Now let's go back to the client list page controller and add some harcoded data.
+
+_./src/components/client/list/client.list.page.controller.ts_
 
 ```diff
 + import {Client} from './viewModel';
@@ -167,9 +169,9 @@ _./src/app/components/client/list/client.list.component.ts_
 + import { Client } from "./viewModel";
 
 export const ClientListComponent = {
-+  bindings: {
-+    clientList: '<'
-+  },  
+  bindings: {
+    clientList: '<'
+  },  
 +  controllerAs: 'vm',
   template: require('./clientlist.html') as string,
 +  controller: class ClientListController {
@@ -316,10 +318,11 @@ export class ClientListPageController {
     clientList : Client[];
 +    clientApiService : ClientApiService;
 
-    constructor(ClientApiService : ClientApiService) {
+-    constructor() {
++    constructor(clientApiService : ClientApiService) {  
       "ngInject";
 
-+      this.clientApiService = ClientApiService;
++      this.clientApiService = clientApiService;
     }
 
     $onInit = () => {
@@ -329,19 +332,19 @@ export class ClientListPageController {
 +        }
 +      )
 
-      this.clientList = [
-        {
-          id : '1',
-          name : 'fake client A',
-          status : 'fake status client A',
-        },
-        {
-          id : '1',
-          name : 'fake client A',
-          status : 'fake status client A',
-        },        
-      ]
-    }    
+-      this.clientList = [
+-        {
+-          id : '1',
+-          name : 'fake client A',
+-          status : 'fake status client A',
+-        },
+-        {
+-          id : '1',
+-          name : 'fake client A',
+-          status : 'fake status client A',
+-        },        
+-      ]
+-    }    
 }
 ```
 
@@ -421,19 +424,20 @@ export class ClientListPageController {
 +    clientListMapper : ClientListMapper;
 
 -    constructor(ClientApiService : ClientApiService) {
-+    constructor(ClientApiService : ClientApiService, clientListMapper : ClientListMapper) {
++    constructor(clientApiService : ClientApiService, clientListMapper : ClientListMapper) {
       "ngInject";
 
-      this.clientApiService = ClientApiService;
+      this.clientApiService = clientApiService;
 +      this.clientListMapper = clientListMapper;      
     }
 
     $onInit = () => {
-+      this.clientApiService.getClientList().then(
-+        (clients) => {
+      this.clientApiService.getClientList().then(
+        (clients) => {
+-          console.log(clients);
 +          this.clientList = this.clientListMapper.ClientListFromModelToVm(clients);          
-+        }
-+      )
+        }
+      )
 
 -      this.clientList = [
 -        {
@@ -450,8 +454,21 @@ export class ClientListPageController {
     }    
 }
 
-ClientListPageController.$inject = ['ClientApiService', 'clientListMapper'];      
++ ClientListPageController.$inject = ['ClientApiService', 'ClientListMapper'];      
 ```
 
 > Excercise let's play with Search functionallity
+
+> Watch out clientlistcomponent, registered name and usage on HTML
+
+From here excercise:
+
+- Create new client page:
+  - Just edit the title and text (ID auto).
+  - Create navigation
+  - Create layout.
+  - Create validations.
+  - Create post api.
+  - Create update (navigation)
+
 
