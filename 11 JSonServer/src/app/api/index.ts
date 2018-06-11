@@ -3,6 +3,4 @@ import { LoginService } from './login';
 
 export const ApiModule = angular.module('api', [
   ])
-  .service('LoginService', LoginService)
-  
-;
+  .service('LoginService', LoginService);
