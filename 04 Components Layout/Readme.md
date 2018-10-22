@@ -93,7 +93,7 @@ npm start
 
 > Let's discuss here about naming, should we take it simpler? What's your take on this?
 
-_./src/app/components/client/list/client.list.search.component.html_
+_./src/app/components/client/list/search/client.list.search.component.html_
 
 ```html
 <div class="input-group">
@@ -110,7 +110,7 @@ _./src/app/components/client/list/client.list.search.component.html_
 </div>
 ```
 
-_./src/app/components/client/list/client.list.search.component.ts_
+_./src/app/components/client/list/search/client.list.search.component.ts_
 
 ```javascript
 export const ClientListSearchComponent = {
@@ -134,6 +134,8 @@ export const ClientListModule = angular.module('clientlist', [
 ;
 ```
 - let's use it in our client.list.html
+
+_./src/app/components/client/list/clientlist.html_
 
 ```diff
 <div>
@@ -251,7 +253,7 @@ import * as angular from 'angular';
 import { ClientListComponent } from './client.list.component';
 import { ClientListSearchComponent } from './search/client.list.search.component';
 import { ClientListResultComponent } from './result/client.list.result.component';
-+ import { ClientListCardComponent } from './result/client.list.card.component'
++ import { ClientListCardComponent } from './result/client.list.card.component';
 
 export const ClientListModule = angular.module('clientlist', [
   ])

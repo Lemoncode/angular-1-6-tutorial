@@ -44,6 +44,45 @@ angular.module('app', [
 - The next step is to define our routing config, let's create a file called app.routes.ts 
 there we will setup the ui-router and setup a route to a login pages
 
+*** Old school working
+
+_./src/app/app.routes.ts_
+
+```javascript
+import * as angular from 'angular';
+import {StateProvider, UrlRouterProvider, Ng1StateDeclaration} from '@uirouter/angularjs'
+
+
+// https://github.com/ngParty/ng-metadata/issues/206
+export const routing = ['$locationProvider', '$stateProvider', '$urlRouterProvider',
+($locationProvider: angular.ILocationProvider,
+  $stateProvider: StateProvider,
+  $urlRouterProvider: UrlRouterProvider
+
+) => {
+  "ngInject";
+
+  // html5 removes the need for # in URL
+  $locationProvider.html5Mode({
+    enabled: false
+  });
+
+  $stateProvider.state('home', <Ng1StateDeclaration>{
+    url: '/home',
+    views: {
+      'content@': { template: '<login></login>' }
+    }
+  }
+  );
+
+  $urlRouterProvider.otherwise('/home');
+
+}]
+```
+
+
+*** Assuming ng-annotate is working, do not use.
+
 _./src/app/app.routes.ts_
 
 ```javascript
@@ -80,6 +119,9 @@ export const routing = ($locationProvider: angular.ILocationProvider,
 string all the services we are injecting in the function (this is done to avoid issues when using the uglified
 version of this files), _ngInject_ does that for us, but we need to add a new plugin into wepack. first let's install
 it:
+
+**** NgAnnotate is an abandone project not working fine, need to jump back to old
+schoolk annotation (But comment how it works).
 
 > https://github.com/huston007/ng-annotate-loader/issues/17
 

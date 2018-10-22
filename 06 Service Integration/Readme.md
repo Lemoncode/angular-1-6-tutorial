@@ -56,6 +56,8 @@ export const LoginModule = angular.module('login', [
 
 - Let's define a DoLoginMethod
 
+_./src/app/components/login/login.page.controller.ts_
+
 ```diff
 export class LoginPageController {
   constructor() {
@@ -121,7 +123,7 @@ export class LoginPageController {
 +  constructor(LoginService : LoginService) {
 +    "ngInject";
 
-+    this.LoginService = LoginService;
++    this.loginService = LoginService;
   }  
 
   doLogin(login : string, password : string) {
@@ -240,12 +242,22 @@ LoginService.$inject = ['$q'];
 
 _./src/components/login/login.component.ts_
 
-```javascript
-  controller: class LoginController {
-    user: string;
-    password: string;
+```diff
+export const LoginComponent = {
+    template: require('./login.html') as string,
++   bindings: {
++     onDoLogin: '&'
++   },
++   controllerAs: 'vm',
++   controller: class LoginController {
++
++    user: string;
++    password: string;
++   }
 ```
 - We can bind this in the inputs and pass that info the OnDoLogin
+
+_./src/components/login/login.html_
 
 ```diff
   <form role="form">
@@ -277,7 +289,7 @@ npm start
 ```
 
 > We will get an error here !!! 'user' will be undefined, what's going on here?
-Time to review and lear from what we have done, and finally realize it was an stupid
+Time to review and learn from what we have done, and finally realize it was an stupid
 bug, if we use the type "email" in the login input validation will be thrown and
 data won't be propagated we have to remove that here.
 

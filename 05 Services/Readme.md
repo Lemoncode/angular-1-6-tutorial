@@ -62,6 +62,8 @@ Let's setup the unit test plumbing
 
 - First we will need to install karma test runner
 
+** Let's avoid karma at this stage
+
 ```cmd
 npm install karma karma-jasmine karma-sourcemap-loader karma-sourcemap-loader karma-webpack karma-chrome-launcher karma-spec-reporter --save-dev
 ```
@@ -365,9 +367,11 @@ import { LoginService } from "./login"
 + })
 ```
 
+**** FROM HERE
+
 - Now let's add the functionallity 
 
-./src/app/login.ts
+./src/app/api/login.ts
 
 ```diff
 export class LoginService {
