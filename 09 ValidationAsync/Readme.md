@@ -21,7 +21,6 @@ _./src/app/api/github.ts_
 ```javascript
 export class GitHubService {    
   constructor(private $q : angular.IQService, private $http : angular.IHttpService) {
-    "ngInject";
   }
 
   public acccountExists(login : string) : angular.IPromise<boolean> {         
@@ -40,6 +39,8 @@ export class GitHubService {
     return deferred.promise;
   }
 }
+
+GitHubService.$inject = ['$q', '$http'];
 ```
 
 - Let's register this new service:
@@ -101,15 +102,12 @@ export class validGithubLogin implements angular.IDirective {
 
   public static Factory() {
     var directive = ['$q', 'GitHubService', ($q: angular.IQService,GitHubService: GitHubService) => {
-      "ngInject";
       return new validGithubLogin($q, GitHubService);
     }];
     
     return directive;
   }
 }
-
-GitHubService.$inject = ['$q', '$http'];
 ```
 
 - Let's register it
