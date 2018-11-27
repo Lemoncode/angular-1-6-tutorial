@@ -127,11 +127,7 @@ _./src/components/login/login.html_
 npm start
 ```
 
-- Adding a set of repeated ng-messages per page or app it's a disgusting 
-repetitive thask, could it be possible to just use a common template and
-be able to override it whenever we want to add a custom message for a 
-specific validation in a given field ? Yes let's do that (we could promote
-at index.html level).
+- Adding a set of repeated ng-messages per page or app it's a disgusting repetitive task, could it be possible to just use a common template and be able to override it whenever we want to add a custom message for a specific validation in a given field ? Yes let's do that (we could promote at index.html level).
 
 _./src/components/login/login.html_
 

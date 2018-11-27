@@ -5,6 +5,12 @@ Before starting the real code (access to services, binding...) is a good idea to
 In this sample we will build the login and clients layout. To build this layout we are going to follow a thumb-rule:components that are "page" like will be built using bootstrap grid css, components that are small and likely to be reused, we will use flexbox to build that layout (try to have the lest dependency with external framework 
 dependencies).
 
+- Install bootstrap, if we don't do it yet
+
+```cmd
+npm install bootstrap@3.3.7 --save
+```
+
 - First of all we are going to ensure that we are referencing the bootstrap CSS library.
 
 _./webpack.config.js_
@@ -23,8 +29,7 @@ _./webpack.config.js_
   },
 ```
 
-- Let's start with the login, for this component we will take it easy, just grab a sample from _bootsnnip_ 
-and paste it.
+- Let's start with the login, for this component we will take it easy, just grab a sample from _bootsnnip_ and paste it.
 
 _./src/app/components/login/login.html_
 
@@ -55,9 +60,7 @@ _./src/app/components/login/login.html_
 </div>
 ```
 
-> This component it's a bit complex, as an excercise for the student: it would be a good idea to break it down into three:
-loginComponent, loginHeadingComponent, loginBodyComponent, and we could go one step further, creating a reusable FormGroup
-subcomponent. 
+> This component it's a bit complex, as an excercise for the student: it would be a good idea to break it down into three: loginComponent, loginHeadingComponent, loginBodyComponent, and we could go one step further, creating a reusable FormGroup subcomponent. 
 
 - Let's test the results:
 
@@ -70,13 +73,13 @@ npm start
 ![client page](./readmepics/client.png)
 
 ```diff
-+---client
+\---client
     \---list
         |   client.list.component.ts
         |   clientlist.html
         |   index.ts
         |
-        +---result
+        \---result
         |       client.list.card.component.html
         |       client.list.card.component.ts
         |       client.list.result.component.html
@@ -93,7 +96,7 @@ npm start
 
 > Let's discuss here about naming, should we take it simpler? What's your take on this?
 
-_./src/app/components/client/list/client.list.search.component.html_
+_./src/app/components/client/list/search/client.list.search.component.html_
 
 ```html
 <div class="input-group">
@@ -110,7 +113,7 @@ _./src/app/components/client/list/client.list.search.component.html_
 </div>
 ```
 
-_./src/app/components/client/list/client.list.search.component.ts_
+_./src/app/components/client/list/search/client.list.search.component.ts_
 
 ```javascript
 export const ClientListSearchComponent = {
@@ -202,8 +205,7 @@ _./src/app/components/client/list/clientlist.html_
 npm start
 ```
 
-- Checking this layout, we can see that in reality we are talking here about two components, let's chop it into
-two: ClientListResultComponent and ClientCardComponent, now it's time to expose properties on the ClientCardComponent. 
+- Checking this layout, we can see that in reality we are talking here about two components, let's chop it into two: `ClientListResultComponent` and `ClientCardComponent`, now it's time to expose properties on the `ClientCardComponent`. 
 
 
 _./src/app/components/client/list/result/client.list.card.component.html_
@@ -227,7 +229,7 @@ export const ClientListCardComponent = {
   controllerAs: 'vm'
 };
 ```
-
+- `<`, this type of bindig let pass values to component. Supports expressions.
 - Time to jump back to the template and add the bindings
 
 _./src/app/components/client/list/result.client.list.card.component.html_

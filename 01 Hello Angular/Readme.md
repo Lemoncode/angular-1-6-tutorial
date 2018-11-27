@@ -36,8 +36,7 @@ npm install raw-loader --save-dev
 +        loader: 'raw-loader'
 +      },      
 ```
-- In order to use "require" to load the templates we will have to install webpack-env 
-plus it's typings.
+- In order to use "require" to load the templates we will have to install webpack-env plus it's typings.
 
 ```cmd
 npm install webpack-env --save-dev
@@ -158,13 +157,9 @@ angular.module('app', [
 </html>
 ```
 - It's time to run our app
+- `ng-stricy-di`: Strict DI Mode basically throws errors when, at run time, it is found a piece of code that is not compliant to minification
+- `ng-cloak`:  The ngCloak directive is used to prevent the Angular html template from being briefly displayed by the browser in its raw (uncompiled) form while your application is loading. Use this directive to avoid the undesirable flicker effect caused by the html template display.
 
 ```cmd
 npm start
 ```
-
-
-
-
-
-

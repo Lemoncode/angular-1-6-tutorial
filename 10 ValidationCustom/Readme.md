@@ -199,8 +199,7 @@ letters e.g. 12345678U".
 npm start
 ```
 
-> Take a look to the implemented code there are some updates nested ng-message not
-working, but general yes.
+> Take a look to the implemented code there are some updates nested ng-message not working, but general yes.
 
 Some excercises and challenges:
 

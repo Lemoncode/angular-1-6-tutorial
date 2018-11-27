@@ -34,7 +34,7 @@ import {AppComponent} from './app.component';
 import { components } from './components'
 
 angular.module('app', [
-+     'ui.router',
++   'ui.router',
     components.name
   ])
   .component('app', AppComponent)
@@ -74,7 +74,9 @@ export const routing = ($locationProvider: angular.ILocationProvider,
 
   $urlRouterProvider.otherwise('/home');
 
-}
+};
+
+routing.$inject = ['$locationProvider', '$stateProvider', '$urlRouterProvider'];
 ```
 - _Hold on a second_ What's this _ngInject_ string? We are using strict-di and we should now enumerate as
 string all the services we are injecting in the function (this is done to avoid issues when using the uglified
@@ -136,7 +138,7 @@ _./src/app/app.ts_
       components.name
     ])
 + .config(routing)
-    .component('app', AppComponent)
+  .component('app', AppComponent)
   ;
 ```
 
@@ -153,15 +155,13 @@ _./src/app/app.html_
 </div>
 ```
 
-- Now if we start the app the exact same display as before will be shown, but this time
-using ui-router.
+- Now if we start the app the exact same display as before will be shown, but this time using ui-router.
 
 ```cmd
 npm start
 ```
 
-- It's time to move forward using the ui-router, we will create a second page and add a 
-navigation link from login page to that second page.
+- It's time to move forward using the ui-router, we will create a second page and add a navigation link from login page to that second page.
 
 _./src/components/client/list/clientlist.html_
 

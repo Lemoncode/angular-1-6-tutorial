@@ -1,4 +1,4 @@
-# Sample 07 - Third partie lib
+# Sample 07 - Third parties lib
 
 In this sample we are going to install a third partie lib
 and make use of it (toastr implementation)[https://github.com/Foxandxss/angular-toastr], we will use it
@@ -57,8 +57,7 @@ export const LoginModule = angular.module('login', [
 
 _./src/app/components/login/login.page.ts_
 
-- Now it's time to move back to the login controller and implement
-the proper notification.
+- Now it's time to move back to the login controller and implement the proper notification.
 
 _./src/app/components/login/login.page.controller.ts_
 

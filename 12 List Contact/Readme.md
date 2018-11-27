@@ -50,7 +50,7 @@ _./src/app/api/components/client/list/client.list.page.ts_
 import { ClientListPageController as controller } from './client.list.page.controller'
 
 export const ClientListPage = {
-  template: '<client-list-component/>',
+  template: '<clientlist/>',
   controller,
   controllerAs: 'vm'
 };
@@ -58,7 +58,7 @@ export const ClientListPage = {
 
 - Let's register the page in the index module definition.
 
-_./src/app/components/client/list/index.js_
+_./src/app/components/client/list/index.ts_
 
 ```diff
 import * as angular from 'angular';
@@ -121,9 +121,9 @@ export class ClientListPageController {
 +          status : 'fake status client A',
 +        },
 +        {
-+          id : '1',
-+          name : 'fake client A',
-+          status : 'fake status client A',
++          id : '2',
++          name : 'fake client B',
++          status : 'fake status client B',
 +        },        
 +      ]
 +    }    
@@ -152,8 +152,8 @@ _./src/app/components/client/list/client.list.page.ts_
 import { ClientListPageController as controller } from './client.list.page.controller'
 
 export const ClientListPage = {
--  template: '<client-list-component/>',
-+  template: '<client-list-component client-list="vm.clientList"/>',
+-  template: '<clientlist/>',
++  template: '<clientlist client-list="vm.clientList"/>',
   controller,
   controllerAs: 'vm'
 };
@@ -182,7 +182,7 @@ export const ClientListComponent = {
 
 - Let's pass this parameter in the clientlist.html
 
-_./src/app/components/client/list/clientList.html_
+_./src/app/components/client/list/clientlist.html_
 
 ```diff
 <div>
@@ -269,7 +269,7 @@ export class ClientApiService {
   }
 }
 
-clientApiService.$inject = ['$http','$q'];
+ClientApiService.$inject = ['$http','$q'];
 ```
 - Let's register this service.
 
@@ -346,6 +346,8 @@ export class ClientListPageController {
 -      ]
 -    }    
 }
+
++ClientListPageController.$inject = ['ClientApiService'];
 ```
 
 - Let's do a quick test to check that everything is working fine.
@@ -354,8 +356,7 @@ export class ClientListPageController {
 npm start
 ```
 
-- Now we need a mapper to convert from the model entity to the viewmodel one
-(in this case both entities match so not much to do).
+- Now we need a mapper to convert from the model entity to the viewmodel one (in this case both entities match so not much to do).
 
 _./src/app/components/client/list/mapper.ts_
 

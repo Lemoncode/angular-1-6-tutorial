@@ -36,7 +36,6 @@ export const LoginModule = angular.module('login', [
 ;
 ```
 
-
 - All this components will be wrapped in a components module.
 
 _./src/app/components/index.ts_

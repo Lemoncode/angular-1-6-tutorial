@@ -40,6 +40,8 @@ export class GitHubService {
     return deferred.promise;
   }
 }
+
+GitHubSevice.$inject = ['$q', '$http'];
 ```
 
 - Let's register this new service:
@@ -58,10 +60,7 @@ export const ApiModule = angular.module('api', [
 ;
 ```
 
-- Now it's time to create a directive that will integrate with the form,
-since we won't expect that this validation will be only be called on 
-this page we will keep it local, if in the future it's needed to be shared
-we could promote it to a ./common/validations folder.
+- Now it's time to create a directive that will integrate with the form, since we won't expect that this validation will be only be called on this page we will keep it local, if in the future it's needed to be sharedwe could promote it to a ./common/validations folder.
 
 _./src/components/login/validations/githublogin.ts_
 
@@ -111,6 +110,8 @@ export class validGithubLogin implements angular.IDirective {
 
 GitHubService.$inject = ['$q', '$http'];
 ```
+
+- `link` function gets executed for each instance of directive so that each instance gets it’s own business-logic without affecting others. If we need to add functionality to our instance of the directive, we can add it to the scope of the element we’re working with. 
 
 - Let's register it
 
@@ -175,8 +176,7 @@ _./src/components/login/login.html_
 
 - Let's run the sample and check that the validation is running.
 
-> Beware when running this, github will block more than 50 request per hour
-coming from the same ip address.
+> Beware when running this, github will block more than 50 request per hour coming from the same ip address.
 
 ```cmd
 npm start

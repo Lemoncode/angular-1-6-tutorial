@@ -67,10 +67,7 @@ export class LoginPageController {
 }
 ```
 
-- It's time to implement the functionallity for doLogin, we need to inject the loginService
-that we have previously created and inject the login service, in the doLogin we will
-call this service (same thing here as before, this time we will first implement, tests
-break then refactor, we could do it the other way around).
+- It's time to implement the functionallity for doLogin, we need to inject the loginService that we have previously created and inject the login service, in the doLogin we willcall this service (same thing here as before, this time we will first implement, testsbreak then refactor, we could do it the other way around).
 
 - First step (we have forgotten to do that) create an index.js defining the api services module.
 
@@ -95,7 +92,7 @@ _./src/app/components/login/index.ts_
 import * as angular from 'angular';
 import { LoginComponent } from './login.component';
 import { LoginPage } from './login.page';
-+ import { ApiModule } from '../../api/index';
++ import { ApiModule } from '../../api';
 
 export const LoginModule = angular.module('login', [
 +  ApiModule.name
@@ -136,10 +133,11 @@ export class LoginPageController {
 +    );
   }
 }
+
++LoginPageController.$inject = ['LoginService'];
 ```
 
-- Let's replace in the app routes the current component that we are using for 
-the login route with the new login page.
+- Let's replace in the app routes the current component that we are using for the login route with the new login page.
 
 _./src/app/app.routes.ts_
 
@@ -161,8 +159,7 @@ _./src/app/app.routes.ts_
 npm start
 ```
 
-- Time to move on: we need to hook the _doLogin_ method in the page with the button on
-the login component, let's go step by step.
+- Time to move on: we need to hook the _doLogin_ method in the page with the button on the login component, let's go step by step.
 
 - First let's expose a callback parameter to our loginComponent and define the fields that will be binded to our form fields (user and password).
 
@@ -170,7 +167,7 @@ _./src/app/components/login.component.ts_
 
 ```diff
 export const LoginComponent = {
-  template: require('./login.html') as string
+  template: require('./login.html') as string,
 +  bindings: {
 +    onDoLogin: '&'    
 +  },
@@ -217,9 +214,7 @@ export const LoginPage = {
 npm start
 ```
 
-- Errors? Yeah (open console), ngInject seems not to be working as expected (it's an abandoned projects
-there's a fork to patch and loader but not quite maintained), let's manually hook this 
-injects, let's place this line of code at the bottom of our file.
+- Errors? Yeah (open console), ngInject seems not to be working as expected (it's an abandoned projects there's a fork to patch and loader but not quite maintained), let's manually hook this injects, let's place this line of code at the bottom of our file.
 
 _./src/app/components/login/login.page.controller.ts_
 
@@ -227,8 +222,7 @@ _./src/app/components/login/login.page.controller.ts_
 LoginPageController.$inject = ['LoginService'];
 ``` 
 
-- Same happens with _LoginService_, are you able to fix this without taking a look at
-the solution?
+- Same happens with _LoginService_, are you able to fix this without taking a look at the solution?
 
 _./src/app/api/login.ts_
 
@@ -276,10 +270,12 @@ form inputes we get a success message on the console log.
 npm start
 ```
 
-> We will get an error here !!! 'user' will be undefined, what's going on here?
-Time to review and lear from what we have done, and finally realize it was an stupid
-bug, if we use the type "email" in the login input validation will be thrown and
-data won't be propagated we have to remove that here.
+> We will get an error here !!! 'user' will be undefined, what's going on here? ime to review and lear from what we have done, and finally realize it was an stupid bug, if we use the type "email" in the login input validation will be thrown and data won't be propagated we have to remove that here.
 
-
-
+__login.html__
+```diff
+-<input type="email" class="form-control" style="border-radius:0px" id="exampleInputEmail1"
+-                                placeholder="Enter email" ng-model="vm.user">
++<input type="text" class="form-control" style="border-radius:0px" id="exampleInputEmail1"
++                               placeholder="Enter email" ng-model="vm.user">
+```

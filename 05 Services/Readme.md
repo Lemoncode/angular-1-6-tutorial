@@ -30,7 +30,7 @@ The final proposed structure:
     \---app
         +---api
         +---components
-        |   +---login
+        |   \---login
         |   |       index.ts
         |   |       login.component.ts
         |   |       login.html
@@ -40,7 +40,7 @@ The final proposed structure:
         |   |
         |   \---client
         +---model
-        \---state
+        +---state
 ```
 
 Advantages of this approach:
@@ -235,9 +235,7 @@ module.exports = function (config) {
 };
 ```
 
-> We are repeating here some wepback config, one thing that we can do is create a base webpack config
-and use it here (webpack merge).
-
+> We are repeating here some wepback config, one thing that we can do is create a base webpack config and use it here (webpack merge).
 
 - Let's configure our tsconfig to setup jasmine as global types
 
@@ -282,10 +280,9 @@ npm test
 
 > We can keep it watching and exucting the tests again on every change by calling _npm run test:watch_
 
-- We can try to follow TDD, let's start by definining a test expecting a simple LoginService,
-if we implement it we get red lights, or even cannot execute (expected the services does not exist)
+- We can try to follow TDD, let's start by definining a test expecting a simple LoginService,if we implement it we get red lights, or even cannot execute (expected the services does not exist)
 
-./src/app/login.spec.ts
+__/src/app/login.spec.ts__
 
 ```diff
 describe('login', () => {
@@ -345,7 +342,7 @@ Jumping into the specs:
 ```diff
 import { LoginService } from "./login"
 
-+ describe('login', () => {
+describe('login', () => {
   describe('performLogin', () => {
     it('Login Service exists', () => {    
       const loginService = new LoginService();
@@ -367,7 +364,7 @@ import { LoginService } from "./login"
 
 - Now let's add the functionallity 
 
-./src/app/login.ts
+__./src/app/login.ts__
 
 ```diff
 export class LoginService {
@@ -381,10 +378,9 @@ export class LoginService {
 
 ```
 
-- Test passing, we can implement the other way around, introduce a test 
-where we test against a not valid login
+- Test passing, we can implement the other way around, introduce a test where we test against a not valid login
 
-./src/app/login.spec.ts
+__./src/app/login.spec.ts__
 
 ```diff
 import { LoginService } from "./login"
@@ -396,7 +392,7 @@ describe('login', () => {
   
       expect(loginService).toBeDefined();
       expect(loginService.validateLogin).toBeDefined();
-    })
+    });
 
     it('valid login', () => {      
       const loginService = new LoginService();
@@ -404,7 +400,7 @@ describe('login', () => {
       const result = loginService.validateLogin('admin', 'test');
 
       expect(result).toBeTruthy();
-    })
+    });
 
 +    it('invalid login', () => {      
 +      const loginService = new LoginService();
@@ -412,16 +408,13 @@ describe('login', () => {
 +      const result = loginService.validateLogin('admin', 'wrongpassword');
 +
 +      expect(result).toBeFalsy();
-+    })    
++    });
   })
 })
 
 ```
 
-- We got green lights, it's time to think about the implementation we have done, on one hand
-this login is supposed to be async, we should introduce Q and return a Promise<bool> result.
-Let's refactor the code and start checking the we are getting red lights (time to fix the 
-tests as well).
+- We got green lights, it's time to think about the implementation we have done, on one hand this login is supposed to be async, we should introduce Q and return a Promise<bool> result. Let's refactor the code and start checking the we are getting red lights (time to fix the tests as well).
 
 > Here we could do it the other way around, change the tests and then updated the code.
 
@@ -450,6 +443,8 @@ export class LoginService {
 -    return (user === 'admin' && pwd === 'test');       
 -  }
 }
+
++LoginService.$inject = ['$q'];
 ```
 
 - It's time to use mocking let's install angular mocks
@@ -460,9 +455,7 @@ npm install angular-mocks @types/angular-mocks --save-dev
 
 - Let's update the tests:
 
-> One more thing to add: since we are working with a pure mocked api we are not hitting $http,
-later on we will have to add a refactor for this. What can we do? Create a real API, or 
-create a fake on but really hit $http service.
+> One more thing to add: since we are working with a pure mocked api we are not hitting $http,later on we will have to add a refactor for this. What can we do? Create a real API, or create a fake on but really hit $http service.
 
 _./src/app/api/login.ts_
 
